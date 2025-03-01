@@ -1,0 +1,23 @@
+.version-card-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    background-color: #D3D9D4;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 95%;
+    height: 13%;
+    min-height: 80px
+}
+
+#version{
+    margin-left: 5%;
+    font-family: "Inter", sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+#generate-xsl.black-button{
+    margin-right: 2%;
+    width: 13vh;
+}

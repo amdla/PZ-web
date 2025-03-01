@@ -1,15 +1,14 @@
 import './App.css';
 import Header from './components/Header';
+import VersionList from './components/VersionList';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          Edit and save to reload.
-        </p>
         <Header />
       </header>
+      <VersionList />
     </div>
   );
 }

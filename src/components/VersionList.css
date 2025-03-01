@@ -1,0 +1,10 @@
+.version-list{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100vh;
+    height: 80vh;
+    background-color: white;
+    gap: 100px;
+}

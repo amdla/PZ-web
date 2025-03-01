@@ -5,6 +5,16 @@ function VersionList(){
         <div className='version-list'>
             <VersionCard />
             <VersionCard />
+            <VersionCard />
+            <VersionCard />
+            <VersionCard />
+            <VersionCard />
+            <VersionCard />
+            <VersionCard />
+            <VersionCard />
+            <VersionCard />
+            <VersionCard />
+
         </div>
     );
 }

@@ -3,8 +3,8 @@ import './VersionCard.css'
 function VersionCard(){
     return(
         <div className='version-card-div'>
-            <span>Wersja 17.01</span>
-            <button>Wygeneruj .xsl</button>
+            <span id='version'>Wersja 17.01</span>
+            <button id='generate-xsl' className='black-button'>Wygeneruj plik Excel</button>
         </div>
     );
 }

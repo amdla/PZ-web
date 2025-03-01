@@ -1,0 +1,24 @@
+.page{
+    background-color: #748D92;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+.page-header{
+    width: 100%;
+}
+.page-body{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 73vh;
+    gap: 45px;
+}
+.test{
+    width: 20px;
+}
+
+.page-body > .black-button {
+    width: 15vh;
+}

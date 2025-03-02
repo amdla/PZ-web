@@ -6,11 +6,14 @@ import './InventoryPage.css';
 
 function InventoryPage(){
     return(
-        <div>
-            <Header />
+    <div>
+        <Header />
+        <div className='inventory-page'>
             <ScanInputSection />
             <ReactTable />
         </div>
+    </div>
+        
     );
 }
 

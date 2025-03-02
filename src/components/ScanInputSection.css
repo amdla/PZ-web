@@ -1,0 +1,31 @@
+#scan-input-section{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    height: 2vh;
+    width: 80%;
+}
+
+input{
+    width: 200px; /* tu nie wiem czy nie do zmiany */
+    border: 1px solid black;
+    border-radius: 15px;
+    height: 30px; /* tu nie wiem czy nie do zmiany */
+    padding: 0px 15px;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+}
+
+input::placeholder {
+    text-align: left;
+    display: block; 
+    width: 100%;
+  }
+
+#scan-input-section > .black-button{
+    width: 250px; /* tu nie wiem czy nie do zmiany */
+    height: 30px; /* tu nie wiem czy nie do zmiany */
+    padding: 0px;
+}
+

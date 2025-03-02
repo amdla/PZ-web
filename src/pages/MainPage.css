@@ -5,9 +5,7 @@
     align-items: center;
     gap: 40px;
 }
-.page-header{
-    width: 100%;
-}
+
 .page-body{
     display: flex;
     flex-direction: column;

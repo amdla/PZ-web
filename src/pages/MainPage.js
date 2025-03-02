@@ -6,9 +6,7 @@ function MainPage(){
     return(
     <div className="page">
       
-      <header className="page-header">
-        <Header />
-      </header>
+      <Header />
 
       <div className='page-body'>
         <VersionList />

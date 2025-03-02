@@ -1,0 +1,25 @@
+.table-container {
+    width: 80%; /* Adjust width */
+    max-height: 400px; /* Set max height */
+    overflow-y: auto; /* Enable vertical scroll */
+    border: 1px solid #ccc;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid black;
+    text-align: left;
+  }
+  
+  thead {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Keep header visible */
+    z-index: 10;
+  }
+  

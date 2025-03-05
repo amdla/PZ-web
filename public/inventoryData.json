@@ -13,6 +13,7 @@
       "quantity": 1,
       "initial_value": "106.14",
       "room": "SK 101",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -29,6 +30,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -45,6 +47,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -61,6 +64,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -77,6 +81,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -93,6 +98,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -109,6 +115,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -125,6 +132,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -141,6 +149,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -157,6 +166,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -173,6 +183,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -189,6 +200,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -205,6 +217,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -221,6 +234,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -237,6 +251,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -253,6 +268,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -269,6 +285,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -285,6 +302,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -301,6 +319,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -317,6 +336,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -333,6 +353,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -349,6 +370,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -365,6 +387,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -381,6 +404,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -397,6 +421,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -413,6 +438,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -429,6 +455,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -445,6 +472,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     },
     {
@@ -461,6 +489,7 @@
       "quantity": 1,
       "initial_value": "377.50",
       "room": "GE 216",
+      "new_room": "",
       "scanned": false
     }
   ]

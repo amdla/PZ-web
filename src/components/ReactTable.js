@@ -4,31 +4,26 @@ import "./ReactTable.css";
 
 const ReactTable = () => {
     const [tableData, setTableData] = useState([]);
+    const [columns, setColumns] = useState([]);
 
   // Load data from JSON file
     useEffect(()=>{
         fetch("/inventoryData.json")
             .then((response) => response.json())
-            .then((data) => setTableData(data))
+            .then((data) => {
+                setTableData(data);
+                if (data.length > 0) {
+                    setColumns(
+                        Object.keys(data[0]).map((key) => ({
+                            accessorKey: key,
+                            header: key.replace(/_/g, " ").toUpperCase(),
+                        }))
+                    );
+                }
+            })
             .catch((error) => console.error("Error loading JSON:", error));
     }, []);
     
-// tak się nie powinno robić jak coś to do zmiany columns wtedy będzie tworzone przy każdym renderze a nie ma tak być (UŻYĆ USEMEMO)
-    const columns = [
-        { accessorKey: "id", header: "ID" },
-        { accessorKey: "inventory", header: "Inwentarz" },
-        { accessorKey: "department", header: "Dział Gospodarczy" },
-        { accessorKey: "asset_group", header: "Grupa Aktywów Trw." },
-        { accessorKey: "category", header: "Grupa Rodzajowa" },
-        { accessorKey: "inventory_number", header: "Numer Inwentarzowy" },
-        { accessorKey: "asset_component", header: "Składnik Aktywów Trw." },
-        { accessorKey: "sub_number", header: "Podnumer" },
-        { accessorKey: "acquisition_date", header: "Data Pierwotnego Przychodu" },
-        { accessorKey: "asset_description", header: "Oznaczenie Aktywów Trwałych" },
-        { accessorKey: "quantity", header: "Ilość" },
-        { accessorKey: "initial_value", header: "Wartość Początkowa" },
-        { accessorKey: "room", header: "Pomieszczenie" },
-  ];
 
     const table = useReactTable({
         data: tableData,

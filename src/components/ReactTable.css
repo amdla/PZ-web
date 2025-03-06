@@ -1,26 +1,26 @@
 .table-container {
-    width: 80%;
-    max-height: 79vh;
-    overflow-y: auto; 
-    border: 1px solid black;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 10px;
-    border: 1px solid black;
-    text-align: left;
-    background-color: white;
-  }
-  
-  thead {
-    position: sticky;
-    top: 0;
-    background-color: #fff; /* Keep header visible */
-    z-index: 10;
-  }
-  
+  width: 80%;
+  max-height: 79vh;
+  overflow-y: scroll; 
+  border: 0.5px solid black;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th, td {
+  padding: 10px;
+  border: 0.5px solid black;
+  text-align: left;
+  background-color: white;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  background-color: #fff; 
+  z-index: 10;
+}

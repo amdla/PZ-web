@@ -3,4 +3,16 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
+    margin-top: 2vh;
+}
+
+.header{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+.header > img {
+    height: 3vh;
+    margin-left: 1%;
 }

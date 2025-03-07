@@ -2,7 +2,7 @@
   width: 80%;
   max-height: 79vh;
   overflow-y: scroll; 
-  border: 0.5px solid black;
+  /* border: 0.5px solid black; */
 }
 
 table {
@@ -22,5 +22,36 @@ thead {
   position: sticky;
   top: 0;
   background-color: #fff; 
-  z-index: 10;
+  z-index: 0;
+  border: 0px solid black;
 }
+
+.filter-icon-wrapper > img{
+  width: 15px;
+  height: 15px;
+}
+.table-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-icon-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;    
+  width: 150px;
+  height: 400px;
+  max-height: 250px;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 20;
+  transform: translateY(5px);
+}
+

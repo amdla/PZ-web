@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
+import filterIcon from '../icons/filter.png';
 import "./ReactTable.css";
 
 const ReactTable = () => {
     const [tableData, setTableData] = useState([]);
     const [columns, setColumns] = useState([]);
 
+    //filter hooks
+    const [activeFilterColumn, setActiveFilerColum] = useState(null);
+    const handleFilterClick = (columnKey) => {
+        setActiveFilerColum((prev) => (prev === columnKey? null : columnKey));
+    }
   // Load data from JSON file
     useEffect(()=>{
         fetch("/inventoryData.json")
@@ -39,8 +45,26 @@ const ReactTable = () => {
                 <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                     <th key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                    </th>
+                        <div className="table-header">  
+                        <span>
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                        </span>
+                        
+                        <div className="filter-icon-wrapper">
+                            <img 
+                            src={filterIcon}
+                            alt="filter"
+                            onClick={() => handleFilterClick(header.column.columnDef.accessorKey)}
+                            />
+                            {activeFilterColumn === header.column.columnDef.accessorKey && (
+                            <div className="filter-menu">
+                                <button>essa</button>
+                            </div>
+                            )}
+                        </div>
+                        </div>
+                  </th>
+                  
                 ))}
                 </tr>
             ))}

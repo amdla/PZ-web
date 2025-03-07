@@ -28,7 +28,6 @@ function FilterMenu({ isOpen }) {
 
   return (
     <div className="filter-menu" ref={menuRef}>
-      {/* Minimal content, no close button needed */}
       <button>essa</button>
     </div>
   );

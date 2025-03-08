@@ -12,54 +12,6 @@
     transform: translateY(5px);
   }
   
-.div-sort-button{
-  width: 95%;
-  background-color: white;
-  padding: 4% 0;
-  padding-left: 5%;
-}
-
-.div-sort-button:hover{
-  background-color: #edede9; 
-}
-
-.sort-button{
-  width: 80%;
-  height: 20%;
-}
 
 
 
-.div-sort-search{
-  /* width: 95%; */
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.sort-search-input{
-  width: 85%;
-  margin-left: 5%;
-}
-
-.sort-search-input:hover{
-  background-color: #edede9;
-}
-
-.search-input-flexbox{
-  width: 88%;
-  height: 130px;
-  margin-left: 5%;
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  border: 1px solid gray;
-  overflow-y: scroll; 
-}
-
-.div-filter-exclusive{
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-  height: 10%;
-}

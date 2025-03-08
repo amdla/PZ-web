@@ -1,5 +1,8 @@
 import './FilterMenu.css'
 import React, { useEffect, useRef } from "react";
+import FilterSort from './FilterSort';
+import FilterSearch from './FilterSearch';
+
 
 function FilterMenu({ isOpen }) {
   const menuRef = useRef(null);
@@ -31,26 +34,11 @@ function FilterMenu({ isOpen }) {
   return (
     <div className="filter-menu" ref={menuRef}>
 
-      <div className='div-sort-button'>
-        <span className='sort-button'>Sortuj od A do Z</span>
-      </div>
-      <div className='div-sort-button'>
-        <span className='sort-button'>Sortuj od Z do A</span>
-      </div>
+      <FilterSort/>
 
       <hr></hr>
 
-      <div className='div-sort-search'>
-        <input type='text' placeholder='Wyszukaj' className='sort-search-input'/>
-        <div className='search-input-flexbox'>
-          
-          <div className='div-filter-exclusive'>
-            <input type="checkbox"/>
-            <span>tekst</span>
-          </div>
-
-        </div>
-      </div>
+      <FilterSearch/>
 
     </div>
   );

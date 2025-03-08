@@ -1,0 +1,15 @@
+.div-sort-button{
+    width: 95%;
+    background-color: white;
+    padding: 4% 0;
+    padding-left: 5%;
+  }
+  
+  .div-sort-button:hover{
+    background-color: #edede9; 
+  }
+  
+  .sort-button{
+    width: 80%;
+    height: 20%;
+  }

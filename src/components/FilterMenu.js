@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 function FilterMenu({ isOpen }) {
   const menuRef = useRef(null);
 
+  // to z chata możliwe że do poprawy
   useEffect(() => {
     if (isOpen && menuRef.current) {
       // 1. Reset to the default right alignment
@@ -24,11 +25,33 @@ function FilterMenu({ isOpen }) {
     }
   }, [isOpen]);
 
+
   if (!isOpen) return null;
 
   return (
     <div className="filter-menu" ref={menuRef}>
-      <button>essa</button>
+
+      <div className='div-sort-button'>
+        <span className='sort-button'>Sortuj od A do Z</span>
+      </div>
+      <div className='div-sort-button'>
+        <span className='sort-button'>Sortuj od Z do A</span>
+      </div>
+
+      <hr></hr>
+
+      <div className='div-sort-search'>
+        <input type='text' placeholder='Wyszukaj' className='sort-search-input'/>
+        <div className='search-input-flexbox'>
+          
+          <div className='div-filter-exclusive'>
+            <input type="checkbox"/>
+            <span>tekst</span>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   );
 }

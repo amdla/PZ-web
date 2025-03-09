@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
-import filterIcon from '../icons/filter.png';
+import filterIconFill from '../icons/filter-fill.png';
+import filterIconEmpty from '../icons/filter-empty.png';
 import "./ReactTable.css";
 import FilterMenu from "./FilterMenu";
 
@@ -9,10 +10,16 @@ const ReactTable = () => {
     const [columns, setColumns] = useState([]);
 
     //filter hooks
-    const [activeFilterColumn, setActiveFilerColum] = useState(null);
+    const [activeFilterColumn, setActiveFilterColumn] = useState(null);
+
     const handleFilterClick = (columnKey) => {
-        setActiveFilerColum((prev) => (prev === columnKey? null : columnKey));
+        //if the prev === columnKey close the filterMenu
+        setActiveFilterColumn((prev) => (prev === columnKey? null : columnKey));
     }
+    
+    //function to pass to filterMenu where a hook is attached to close the filterMenu when clicked outside the element
+    const closeMenu = () => setActiveFilterColumn(null);
+
 
   // Load data from JSON file
     useEffect(()=>{
@@ -51,16 +58,16 @@ const ReactTable = () => {
                         <span>
                             {flexRender(header.column.columnDef.header, header.getContext())}
                         </span>
-                        
-                        <div className="filter-icon-wrapper">
+                        {/*clicking on the icon triggers the onClick handler and the mouseDown handler in the filterMenu which call on close and the onClick opens it instead of closing thats why onMouseDown */}
+                        <div className="filter-icon-wrapper" onMouseDown={(e) => e.stopPropagation()} >
                             <img 
-                            src={filterIcon}
+                            src={activeFilterColumn === header.column.columnDef.accessorKey? filterIconEmpty : filterIconFill}
                             alt="filter"
                             onClick={() => handleFilterClick(header.column.columnDef.accessorKey)}
                             />
 
                             {activeFilterColumn === header.column.columnDef.accessorKey && (
-                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} />
+                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu}/>
                             )}
                         </div>
                         </div>

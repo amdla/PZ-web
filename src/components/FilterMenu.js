@@ -4,7 +4,7 @@ import FilterSort from './FilterSort';
 import FilterSearch from './FilterSearch';
 
 
-function FilterMenu({ isOpen }) {
+function FilterMenu({ isOpen, onClose }) {
   const menuRef = useRef(null);
 
   // to z chata możliwe że do poprawy
@@ -27,6 +27,18 @@ function FilterMenu({ isOpen }) {
       }
     }
   }, [isOpen]);
+
+useEffect(() => {
+  const handleClickOutside = (Event) =>{
+    if(menuRef.current && !menuRef.current.contains(Event.target) ){
+      onClose();
+    }
+  }
+  if(isOpen){
+    document.addEventListener('mousedown', handleClickOutside);  
+  }
+  return ()=> document.removeEventListener('mousedown', handleClickOutside);
+}, [isOpen, onClose]);
 
 
   if (!isOpen) return null;

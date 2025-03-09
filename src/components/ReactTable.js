@@ -67,8 +67,9 @@ const ReactTable = () => {
                             />
 
                             {activeFilterColumn === header.column.columnDef.accessorKey && (
-                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu}/>
+                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey}/>
                             )}
+                            {console.log(header.column.columnDef.accessorKey)}
                         </div>
                         </div>
                   </th>

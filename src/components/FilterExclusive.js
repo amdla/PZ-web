@@ -1,11 +1,12 @@
 import React from 'react'
 import './FilterExclusive.css'
 
-function FilterExclusive() {
+function FilterExclusive({name, isChecked, onToggle}) {
+ 
   return (
     <div className='div-filter-exclusive'>
-        <input type="checkbox"/>
-        <span>tekst</span>
+        <input type="checkbox"  checked={isChecked} onClick={onToggle}/>
+        <span>{name}</span>
     </div>
   )
 }

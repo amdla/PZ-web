@@ -4,7 +4,7 @@ import FilterSort from './FilterSort';
 import FilterSearch from './FilterSearch';
 
 
-function FilterMenu({ isOpen, onClose }) {
+function FilterMenu({ isOpen, onClose, data, columnName }) {
   const menuRef = useRef(null);
 
   // to z chata możliwe że do poprawy
@@ -50,7 +50,7 @@ useEffect(() => {
 
       <hr></hr>
 
-      <FilterSearch/>
+      <FilterSearch data={data} columnName={columnName}/>
 
     </div>
   );

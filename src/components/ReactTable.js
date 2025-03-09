@@ -4,10 +4,14 @@ import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
 import "./ReactTable.css";
 import FilterMenu from "./FilterMenu";
+import useCheckboxes from '../hooks/useCheckboxes';
 
 const ReactTable = () => {
     const [tableData, setTableData] = useState([]);
     const [columns, setColumns] = useState([]);
+
+    //checkBoxes hook
+    const [checkboxes, toggleCheckbox] = useCheckboxes(tableData);
 
     //filter hooks
     const [activeFilterColumn, setActiveFilterColumn] = useState(null);
@@ -67,7 +71,7 @@ const ReactTable = () => {
                             />
 
                             {activeFilterColumn === header.column.columnDef.accessorKey && (
-                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey}/>
+                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey} checkboxes={checkboxes} toggleCheckbox={toggleCheckbox}/>
                             )}
                             {console.log(header.column.columnDef.accessorKey)}
                         </div>

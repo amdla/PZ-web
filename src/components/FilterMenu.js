@@ -4,7 +4,7 @@ import FilterSort from './FilterSort';
 import FilterSearch from './FilterSearch';
 
 
-function FilterMenu({ isOpen, onClose, data, columnName }) {
+function FilterMenu({ isOpen, onClose, data, columnName, checkboxes, toggleCheckbox }) {
   const menuRef = useRef(null);
 
   // to z chata możliwe że do poprawy
@@ -50,7 +50,7 @@ useEffect(() => {
 
       <hr></hr>
 
-      <FilterSearch data={data} columnName={columnName}/>
+      <FilterSearch data={data} columnName={columnName} checkboxes={checkboxes} toggleCheckbox={toggleCheckbox}/>
 
     </div>
   );

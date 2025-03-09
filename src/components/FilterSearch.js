@@ -8,7 +8,7 @@ function FilterSearch({data, columnName, checkboxes, toggleCheckbox}) {
 
   const filteredData = data.filter( 
     (item) => {
-      const value = String(item[columnName]); // Convert to string
+      const value = String(item[columnName]); // Convert to stringg
       return value.toLowerCase().includes(searchTerm.toLowerCase());
     }
   );

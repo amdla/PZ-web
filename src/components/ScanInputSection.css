@@ -7,7 +7,7 @@
     width: 80%;
 }
 
-input{
+.input-scan{
     width: 200px; /* tu nie wiem czy nie do zmiany */
     border: 1px solid black;
     border-radius: 15px;

@@ -1,0 +1,28 @@
+
+.div-sort-search{
+    /* width: 95%; */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .sort-search-input{
+    width: 85%;
+    margin-left: 5%;
+  }
+  
+  .sort-search-input:hover{
+    background-color: #edede9;
+  }
+  
+  .search-input-flexbox{
+    width: 88%;
+    height: 130px;
+    margin-left: 5%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    border: 1px solid gray;
+    overflow-y: scroll; 
+  }
+  

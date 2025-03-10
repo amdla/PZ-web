@@ -2,9 +2,9 @@ import { useState } from "react";
 
 
 function useCheckboxes(data, keyProperty = 'id'){
-    const initialState = {'selectAll': true};
+    const initialState = {'selectAll': false};
     data.forEach(item => {
-        initialState[item[keyProperty]] = true;
+        initialState[item[keyProperty]] = false;
     });
 
     const [checkBoxes, setCheckBoxes] = useState(initialState);

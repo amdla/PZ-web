@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, flexRender, getFilteredRowModel } from "@tanstack/react-table";
 import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
 import "./ReactTable.css";
@@ -9,9 +9,11 @@ import useCheckboxes from '../hooks/useCheckboxes';
 const ReactTable = () => {
     const [tableData, setTableData] = useState([]);
     const [columns, setColumns] = useState([]);
-
+    const [columnFilters, setColumnFilters] = useState([]);
     //checkBoxes hook
-    const [checkboxes, toggleCheckbox] = useCheckboxes(tableData);
+    const [checkboxes, toggleCheckbox, setCheckBoxes] = useCheckboxes(tableData);
+
+    
 
     //filter hooks
     const [activeFilterColumn, setActiveFilterColumn] = useState(null);
@@ -36,6 +38,13 @@ const ReactTable = () => {
                         Object.keys(data[0]).map((key) => ({
                             accessorKey: key,
                             header: key.replace(/_/g, " ").toUpperCase(),
+                            filterFn: (row, columnId, filterValue) => {
+                                if (filterValue.length === 0) {
+                                    return false;
+                                }
+                                return filterValue.includes(row.getValue(columnId));
+                            },
+                              
                         }))
                     );
                 }
@@ -43,11 +52,24 @@ const ReactTable = () => {
             .catch((error) => console.error("Error loading JSON:", error));
     }, []);
     
+    // reinitialize the filter hook once the data is loaded
+    useEffect(()=>{
+        if(tableData.length > 0){
+            const initialState = {'selectAll' : true};
+            tableData.map((item) =>
+                initialState[item.id] = true
+            );
+            setCheckBoxes(initialState);
+        }
+    }, [tableData, setCheckBoxes]);
 
     const table = useReactTable({
         data: tableData,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        state: {columnFilters},
+        onColumnFiltersChange: setColumnFilters,
     });
 
     return (
@@ -71,7 +93,7 @@ const ReactTable = () => {
                             />
 
                             {activeFilterColumn === header.column.columnDef.accessorKey && (
-                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey} checkboxes={checkboxes} toggleCheckbox={toggleCheckbox}/>
+                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey} checkboxes={checkboxes} toggleCheckbox={toggleCheckbox} setColumnFilters={setColumnFilters}/>
                             )}
                             {console.log(header.column.columnDef.accessorKey)}
                         </div>

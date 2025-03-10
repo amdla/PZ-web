@@ -17,7 +17,7 @@
   
   .search-input-flexbox{
     width: 88%;
-    height: 130px;
+    height: 200px;
     margin-left: 5%;
     display: flex;
     justify-content: flex-start;
@@ -26,3 +26,13 @@
     overflow-y: scroll; 
   }
   
+  .filter-buttons-container{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px;
+  }
+
+  .cancel-button{
+    margin-right: 6%;
+  }

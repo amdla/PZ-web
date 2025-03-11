@@ -4,18 +4,17 @@ import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
 import "./ReactTable.css";
 import FilterMenu from "./FilterMenu";
-import useCheckboxes from '../hooks/useCheckboxes';
 
 const ReactTable = () => {
     const [tableData, setTableData] = useState([]);
     const [columns, setColumns] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
-    //checkBoxes hook
-    const [checkboxes, toggleCheckbox, setCheckBoxes] = useCheckboxes(tableData);
 
+    //checkBoxes hook
+    const [filters, setFilters] = useState([]);
     
 
-    //filter hooks
+    //opening filter hooks
     const [activeFilterColumn, setActiveFilterColumn] = useState(null);
 
     const handleFilterClick = (columnKey) => {
@@ -51,17 +50,6 @@ const ReactTable = () => {
             })
             .catch((error) => console.error("Error loading JSON:", error));
     }, []);
-    
-    // reinitialize the filter hook once the data is loaded
-    useEffect(()=>{
-        if(tableData.length > 0){
-            const initialState = {'selectAll' : true};
-            tableData.map((item) =>
-                initialState[item.id] = true
-            );
-            setCheckBoxes(initialState);
-        }
-    }, [tableData, setCheckBoxes]);
 
     const table = useReactTable({
         data: tableData,
@@ -93,9 +81,8 @@ const ReactTable = () => {
                             />
 
                             {activeFilterColumn === header.column.columnDef.accessorKey && (
-                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey} checkboxes={checkboxes} toggleCheckbox={toggleCheckbox} setColumnFilters={setColumnFilters}/>
+                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey}  filters={filters} setFilters={setFilters} setColumnFilters={setColumnFilters}/>
                             )}
-                            {console.log(header.column.columnDef.accessorKey)}
                         </div>
                         </div>
                   </th>

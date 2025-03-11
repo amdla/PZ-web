@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import './FilterSearch.css'
 import FilterExclusive from './FilterExclusive'
 
-function FilterSearch({data, columnName, checkboxes, toggleCheckbox, setColumnFilters, onClose}) {
+function FilterSearch({data, columnName, filters, setFilters, setColumnFilters, onClose}) {
 
   const [searchTerm, setSearchTerm] = useState('');
   
@@ -15,22 +15,59 @@ function FilterSearch({data, columnName, checkboxes, toggleCheckbox, setColumnFi
 
   const uniqueValues = [...new Set(filteredData.map(item => item[columnName]))]
 
+  const getInitialState = ()=>{
+    const initialState = {'selectAll': true};
+    uniqueValues.forEach(value => {
+      initialState[value] = true;
+    });
+    return initialState;
+  }
+
+  //jak istnieje już stan dla danej kolumny to go wczytaj jak nie to zainicjuj nowy
+  const [checkboxes, setCheckboxes] = useState(()=>{
+    if (filters[columnName]) {
+      return filters[columnName];
+    } else {
+      return getInitialState();
+    }  
+  });
+
+  useEffect(()=>{
+    setFilters((prev)=>({prev, [columnName]: checkboxes}))
+  }, [setFilters, columnName, checkboxes])
+
+  const toggleCheckbox = (key) =>{
+      if(key === 'selectAll'){
+        const newValue = !checkboxes.selectAll;
+        const newState = {'selectAll' : newValue};
+        uniqueValues.forEach((value) => {
+            newState[value] = newValue;
+        });
+        setCheckboxes(newState);
+      } else{
+        setCheckboxes((prev) => {
+            const newState = {...prev, [key] : !prev[key]};
+            const selectAllNewValue = uniqueValues.every((value) => newState[value]);
+            newState.selectAll = selectAllNewValue;
+            return newState;
+        });
+      }
+  };
+
   return (
     <div className='div-sort-search'>
       <input type='text' placeholder='Wyszukaj' className='sort-search-input' onChange={(e) => setSearchTerm(e.target.value)}/>
       <div className='search-input-flexbox'>
-        <FilterExclusive name='Zaznacz wszystkie' isChecked={checkboxes.selectAll} onToggle={() => toggleCheckbox('selectAll')} />
+        <FilterExclusive name='Zaznacz wszystkie' isChecked={checkboxes.selectAll || false} onToggle={() => toggleCheckbox('selectAll')} />
         {uniqueValues.map((value) => (
-          <FilterExclusive key={value} name={value} isChecked={checkboxes[value]} onToggle={()=>toggleCheckbox(value)} />
+          <FilterExclusive key={value} name={value} isChecked={checkboxes[value] || false} onToggle={()=>toggleCheckbox(value)} />
         ))}
       </div>
       <div className='filter-buttons-container'>
 
       <button onClick={() => {
-        // Build an array of values selected via checkboxes.
         const selectedValues = uniqueValues.filter(value => checkboxes[value])
 
-        // Set the column filter for the current column
         setColumnFilters(prevFilters => {
           const otherFilters = prevFilters.filter(filter => filter.id !== columnName);
           return [...otherFilters, { id: columnName, value: selectedValues }];

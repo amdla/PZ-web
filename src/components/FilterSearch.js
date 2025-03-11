@@ -5,15 +5,12 @@ import FilterExclusive from './FilterExclusive'
 function FilterSearch({data, columnName, filters, setFilters, setColumnFilters, onClose}) {
 
   const [searchTerm, setSearchTerm] = useState('');
-  
-  const filteredData = data.filter( 
-    (item) => {
-      const value = String(item[columnName]); //convert to stringg
-      return value.toLowerCase().includes(searchTerm.toLowerCase());
-    }
-  );
 
-  const uniqueValues = [...new Set(filteredData.map(item => item[columnName]))]
+  const uniqueValues = [...new Set(data.map(item => item[columnName]))]
+
+  const displayedUniqueValues = uniqueValues.filter(value =>
+    value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getInitialState = ()=>{
     const initialState = {'selectAll': true};
@@ -32,9 +29,11 @@ function FilterSearch({data, columnName, filters, setFilters, setColumnFilters, 
     }  
   });
 
-  useEffect(()=>{
-    setFilters((prev)=>({prev, [columnName]: checkboxes}))
-  }, [setFilters, columnName, checkboxes])
+  useEffect(() => {
+    setFilters(prev => ({ ...prev, [columnName]: checkboxes }));
+  }, [checkboxes, columnName, setFilters]);
+
+
 
   const toggleCheckbox = (key) =>{
       if(key === 'selectAll'){
@@ -59,7 +58,7 @@ function FilterSearch({data, columnName, filters, setFilters, setColumnFilters, 
       <input type='text' placeholder='Wyszukaj' className='sort-search-input' onChange={(e) => setSearchTerm(e.target.value)}/>
       <div className='search-input-flexbox'>
         <FilterExclusive name='Zaznacz wszystkie' isChecked={checkboxes.selectAll || false} onToggle={() => toggleCheckbox('selectAll')} />
-        {uniqueValues.map((value) => (
+        {displayedUniqueValues.map((value) => (
           <FilterExclusive key={value} name={value} isChecked={checkboxes[value] || false} onToggle={()=>toggleCheckbox(value)} />
         ))}
       </div>
@@ -70,6 +69,9 @@ function FilterSearch({data, columnName, filters, setFilters, setColumnFilters, 
 
         setColumnFilters(prevFilters => {
           const otherFilters = prevFilters.filter(filter => filter.id !== columnName);
+          if (selectedValues.length === uniqueValues.length) {
+            return otherFilters;
+          }
           return [...otherFilters, { id: columnName, value: selectedValues }];
         });
 

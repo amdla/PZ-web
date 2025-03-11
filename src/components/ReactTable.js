@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useReactTable, getCoreRowModel, flexRender, getFilteredRowModel } from "@tanstack/react-table";
 import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
+import filterIconActive from '../icons/filter-active.png';
+
 import "./ReactTable.css";
 import FilterMenu from "./FilterMenu";
 
@@ -11,7 +13,7 @@ const ReactTable = () => {
     const [columnFilters, setColumnFilters] = useState([]);
 
     //checkBoxes hook
-    const [filters, setFilters] = useState([]);
+    const [filters, setFilters] = useState({});
     
 
     //opening filter hooks
@@ -59,35 +61,38 @@ const ReactTable = () => {
         state: {columnFilters},
         onColumnFiltersChange: setColumnFilters,
     });
-
+    
     return (
         <div className="table-container">
         <table>
             <thead>
             {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                        <div className="table-header">  
-                        <span>
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                        </span>
-                        {/*clicking on the icon triggers the onClick handler and the mouseDown handler in the filterMenu which call on close and the onClick opens it instead of closing thats why onMouseDown */}
-                        <div className="filter-icon-wrapper" onMouseDown={(e) => e.stopPropagation()} >
-                            <img 
-                            src={activeFilterColumn === header.column.columnDef.accessorKey? filterIconEmpty : filterIconFill}
-                            alt="filter"
-                            onClick={() => handleFilterClick(header.column.columnDef.accessorKey)}
-                            />
+                {headerGroup.headers.map((header) => {
+                    const columnKey = header.column.columnDef.accessorKey;
+                    const isActive = activeFilterColumn === columnKey;
+                    const isFiltered = columnFilters.some(filter => filter.id === columnKey);
+                    return(<th key={header.id}>
+                            <div className="table-header">  
+                            <span>
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                            </span>
+                            {/*clicking on the icon triggers the onClick handler and the mouseDown handler in the filterMenu which call on close and the onClick opens it instead of closing thats why onMouseDown */}
+                            <div className="filter-icon-wrapper" onMouseDown={(e) => e.stopPropagation()} >
+                                <img 
+                                src={isActive ? filterIconEmpty : isFiltered ? filterIconActive : filterIconFill}
+                                alt="filter"
+                                onClick={() => handleFilterClick(header.column.columnDef.accessorKey)}
+                                />
 
-                            {activeFilterColumn === header.column.columnDef.accessorKey && (
-                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey}  filters={filters} setFilters={setFilters} setColumnFilters={setColumnFilters}/>
-                            )}
-                        </div>
-                        </div>
-                  </th>
-                  
-                ))}
+                                {activeFilterColumn === header.column.columnDef.accessorKey && (
+                                    <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey}  filters={filters} setFilters={setFilters} setColumnFilters={setColumnFilters}/>
+                                )}
+                            </div>
+                            </div>
+                        </th>
+                    );
+                })}
                 </tr>
             ))}
             </thead>

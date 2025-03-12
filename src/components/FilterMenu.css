@@ -3,8 +3,8 @@
     top: 100%;
     right: 0;    
     width: 200px;
-    height: 400px;
-    max-height: 250px;
+    height: 350px;
+    max-height: 350px;
     background: white;
     border: 1px solid #ccc;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);

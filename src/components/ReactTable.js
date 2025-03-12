@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, flexRender, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
 import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
+import filterIconActive from '../icons/filter-active.png';
+
 import "./ReactTable.css";
 import FilterMenu from "./FilterMenu";
-import useCheckboxes from '../hooks/useCheckboxes';
 
 const ReactTable = () => {
     const [tableData, setTableData] = useState([]);
     const [columns, setColumns] = useState([]);
-
+    const [columnFilters, setColumnFilters] = useState([]);
+    const [sorting, setSorting] = useState([])
     //checkBoxes hook
-    const [checkboxes, toggleCheckbox] = useCheckboxes(tableData);
+    const [filters, setFilters] = useState({});
+    
 
-    //filter hooks
+    //opening filter hooks
     const [activeFilterColumn, setActiveFilterColumn] = useState(null);
 
     const handleFilterClick = (columnKey) => {
@@ -36,49 +39,67 @@ const ReactTable = () => {
                         Object.keys(data[0]).map((key) => ({
                             accessorKey: key,
                             header: key.replace(/_/g, " ").toUpperCase(),
+                            filterFn: (row, columnId, filterValue) => {
+                                if (filterValue.length === 0) {
+                                    return false;
+                                }
+                                return filterValue.includes(row.getValue(columnId));
+                            },
+                              
                         }))
                     );
                 }
             })
             .catch((error) => console.error("Error loading JSON:", error));
     }, []);
-    
 
     const table = useReactTable({
         data: tableData,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            columnFilters,
+            sorting,
+        },
+        onColumnFiltersChange: setColumnFilters,
+        onSortingChange: setSorting,
     });
-
+    
+    const visibleData = table.getRowModel().rows.map((row) => row.original);
+    
     return (
         <div className="table-container">
         <table>
             <thead>
             {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                        <div className="table-header">  
-                        <span>
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                        </span>
-                        {/*clicking on the icon triggers the onClick handler and the mouseDown handler in the filterMenu which call on close and the onClick opens it instead of closing thats why onMouseDown */}
-                        <div className="filter-icon-wrapper" onMouseDown={(e) => e.stopPropagation()} >
-                            <img 
-                            src={activeFilterColumn === header.column.columnDef.accessorKey? filterIconEmpty : filterIconFill}
-                            alt="filter"
-                            onClick={() => handleFilterClick(header.column.columnDef.accessorKey)}
-                            />
+                {headerGroup.headers.map((header) => {
+                    const columnKey = header.column.columnDef.accessorKey;
+                    const isActive = activeFilterColumn === columnKey;
+                    const isFiltered = columnFilters.some(filter => filter.id === columnKey) /*|| header.column.getIsSorted()*/;
+                    return(<th key={header.id}>
+                            <div className="table-header">  
+                            <span>
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                            </span>
+                            {/*clicking on the icon triggers the onClick handler and the mouseDown handler in the filterMenu which call on close and the onClick opens it instead of closing thats why onMouseDown */}
+                            <div className="filter-icon-wrapper" onMouseDown={(e) => e.stopPropagation()} >
+                                <img 
+                                src={isActive ? filterIconEmpty : isFiltered ? filterIconActive : filterIconFill}
+                                alt="filter"
+                                onClick={() => handleFilterClick(header.column.columnDef.accessorKey)}
+                                />
 
-                            {activeFilterColumn === header.column.columnDef.accessorKey && (
-                                <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey} checkboxes={checkboxes} toggleCheckbox={toggleCheckbox}/>
-                            )}
-                            {console.log(header.column.columnDef.accessorKey)}
-                        </div>
-                        </div>
-                  </th>
-                  
-                ))}
+                                {activeFilterColumn === header.column.columnDef.accessorKey && (
+                                    <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={ columnFilters.some((filter) => filter.id === columnKey) ? tableData: visibleData } columnName={header.column.columnDef.accessorKey}  filters={filters} setFilters={setFilters} setColumnFilters={setColumnFilters} setSorting={setSorting} sorting={sorting}/>
+                                )}
+                            </div>
+                            </div>
+                        </th>
+                    );
+                })}
                 </tr>
             ))}
             </thead>

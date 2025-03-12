@@ -78,7 +78,7 @@ function FilterSearch({data, columnName, filters, setFilters, setColumnFilters, 
         onClose(); // Optionally close the filter menu.
         }}>ok</button>
 
-        <button className='cancel-button'>anuluj</button>
+        <button className='cancel-button' onClick={onClose}>anuluj</button>
       </div>
     </div>
   )

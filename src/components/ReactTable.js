@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useReactTable, getCoreRowModel, flexRender, getFilteredRowModel } from "@tanstack/react-table";
+import { useReactTable, getCoreRowModel, flexRender, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
 import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
 import filterIconActive from '../icons/filter-active.png';
@@ -11,7 +11,7 @@ const ReactTable = () => {
     const [tableData, setTableData] = useState([]);
     const [columns, setColumns] = useState([]);
     const [columnFilters, setColumnFilters] = useState([]);
-
+    const [sorting, setSorting] = useState([])
     //checkBoxes hook
     const [filters, setFilters] = useState({});
     
@@ -58,9 +58,16 @@ const ReactTable = () => {
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        state: {columnFilters},
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            columnFilters,
+            sorting,
+        },
         onColumnFiltersChange: setColumnFilters,
+        onSortingChange: setSorting,
     });
+    
+    const visibleData = table.getRowModel().rows.map((row) => row.original);
     
     return (
         <div className="table-container">
@@ -71,7 +78,7 @@ const ReactTable = () => {
                 {headerGroup.headers.map((header) => {
                     const columnKey = header.column.columnDef.accessorKey;
                     const isActive = activeFilterColumn === columnKey;
-                    const isFiltered = columnFilters.some(filter => filter.id === columnKey);
+                    const isFiltered = columnFilters.some(filter => filter.id === columnKey) /*|| header.column.getIsSorted()*/;
                     return(<th key={header.id}>
                             <div className="table-header">  
                             <span>
@@ -86,7 +93,7 @@ const ReactTable = () => {
                                 />
 
                                 {activeFilterColumn === header.column.columnDef.accessorKey && (
-                                    <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={tableData} columnName={header.column.columnDef.accessorKey}  filters={filters} setFilters={setFilters} setColumnFilters={setColumnFilters}/>
+                                    <FilterMenu isOpen={activeFilterColumn === header.column.columnDef.accessorKey} onClose={closeMenu} data={ columnFilters.some((filter) => filter.id === columnKey) ? tableData: visibleData } columnName={header.column.columnDef.accessorKey}  filters={filters} setFilters={setFilters} setColumnFilters={setColumnFilters} setSorting={setSorting} sorting={sorting}/>
                                 )}
                             </div>
                             </div>

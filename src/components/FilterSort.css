@@ -13,3 +13,10 @@
     width: 80%;
     height: 20%;
   }
+
+  .sorted{
+    background-color: gray;
+  }
+  .sorted:hover{
+    background-color: gray;
+  }

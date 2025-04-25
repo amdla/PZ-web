@@ -36,18 +36,30 @@ const ReactTable = () => {
                 setTableData(data);
                 if (data.length > 0) {
                     setColumns(
-                        Object.keys(data[0]).map((key) => ({
+                        Object.keys(data[0]).map((key) => {
+                          const baseColumn = {
                             accessorKey: key,
                             header: key.replace(/_/g, " ").toUpperCase(),
                             filterFn: (row, columnId, filterValue) => {
-                                if (filterValue.length === 0) {
-                                    return false;
-                                }
-                                return filterValue.includes(row.getValue(columnId));
+                              if (filterValue.length === 0) {
+                                return false;
+                              }
+                              return filterValue.includes(row.getValue(columnId));
                             },
-                              
-                        }))
-                    );
+                          };
+                      
+                          if (key === "scanned") {
+                            baseColumn.cell = (info) => (
+                                <div className="checkbox-wrapper">
+                                    <input type="checkbox" checked={info.getValue()} readOnly />
+                                </div>
+                            );
+                          }
+                      
+                          return baseColumn;
+                        })
+                      );
+                      
                 }
             })
             .catch((error) => console.error("Error loading JSON:", error));
@@ -108,7 +120,7 @@ const ReactTable = () => {
                 <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                     <td key={cell.id}>
-                    { cell.getValue() /*TEGO UŻYWA SIĘ JAK BĘDZIE CHECKBOX {flexRender(cell.column.columnDef.cell, cell.getContext())} */}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                 ))}
                 </tr>

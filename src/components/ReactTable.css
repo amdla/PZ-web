@@ -16,8 +16,9 @@ table {
 th, td {
   padding: 10px;
   border: 0.5px solid black;
-  text-align: left;
   background-color: white;
+  text-align: left;
+  vertical-align: middle;
 }
 
 thead {
@@ -43,3 +44,15 @@ thead {
   display: inline-block;
 }
 
+.checkbox-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+input[type="checkbox"][readOnly] {
+  transform: scale(1.2);
+  pointer-events: none;
+  accent-color: green;
+}

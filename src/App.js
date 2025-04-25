@@ -1,13 +1,14 @@
 import './App.css';
-
+import { Routes, Route } from 'react-router-dom';
+import MainPage from './pages/MainPage';
+import InventoryPage from './pages/InventoryPage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <span>esa</span>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<MainPage />} />
+      <Route path="/inventory" element={<InventoryPage />} />
+    </Routes>
   );
 }
 

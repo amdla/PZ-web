@@ -6,7 +6,7 @@ function FilterSearch({data, columnName, filters, setFilters, setColumnFilters, 
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const uniqueValues = [...new Set(data.map(item => item[columnName]))]
+  const uniqueValues = [...new Set(data.map(item => String(item[columnName])))];
 
   const displayedUniqueValues = uniqueValues.filter(value =>
     value.toString().toLowerCase().includes(searchTerm.toLowerCase())

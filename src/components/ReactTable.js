@@ -29,7 +29,7 @@ const ReactTable = ({ tableData, setTableData }) => {
             if (filterValue.length === 0) {
               return false;
             }
-            return filterValue.includes(row.getValue(columnId));
+            return filterValue.includes(String(row.getValue(columnId)));
           },
         };
 

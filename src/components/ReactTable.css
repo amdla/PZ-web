@@ -27,6 +27,7 @@ thead {
   background-color: #fff; 
   z-index: 0;
   border: 0px solid black;
+  z-index: 2;
 }
 
 .filter-icon-wrapper > img{
@@ -49,10 +50,12 @@ thead {
   justify-content: center;
   align-items: center;
   height: 100%;
+  z-index: 0;
 }
 
 input[type="checkbox"][readOnly] {
   transform: scale(1.2);
   pointer-events: none;
   accent-color: green;
+  z-index: 0;
 }

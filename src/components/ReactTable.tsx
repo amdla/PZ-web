@@ -1,19 +1,51 @@
-import { useEffect, useState } from "react";
-import { useReactTable, getCoreRowModel, flexRender, getFilteredRowModel, getSortedRowModel } from "@tanstack/react-table";
-import "./ReactTable.css";
+import React, { useEffect, useState } from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  getFilteredRowModel,
+  getSortedRowModel,
+  ColumnDef,
+  Table,
+  Header,
+} from '@tanstack/react-table';
+import './ReactTable.css';
 import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
 import filterIconActive from '../icons/filter-active.png';
-import FilterMenu from "./FilterMenu";
+import FilterMenu from './FilterMenu';
 
-const ReactTable = ({ tableData, setTableData }) => {
-  const [columns, setColumns] = useState([]);
-  const [columnFilters, setColumnFilters] = useState([]);
-  const [sorting, setSorting] = useState([]);
-  const [filters, setFilters] = useState({});
-  const [activeFilterColumn, setActiveFilterColumn] = useState(null);
+interface InventoryItem {
+  id: number;
+  inventory: number;
+  department: number;
+  asset_group: number;
+  category: string;
+  inventory_number: string;
+  asset_component: number;
+  sub_number: number;
+  acquisition_date: string;
+  asset_description: string;
+  quantity: number;
+  initial_value: string;
+  room: string;
+  new_room: string;
+  scanned: boolean;
+}
 
-  const handleFilterClick = (columnKey) => {
+interface ReactTableProps {
+  tableData: InventoryItem[];
+  setTableData: React.Dispatch<React.SetStateAction<InventoryItem[]>>;
+}
+
+const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
+  const [columns, setColumns] = useState<ColumnDef<InventoryItem, any>[]>([]);
+  const [columnFilters, setColumnFilters] = useState<any[]>([]);
+  const [sorting, setSorting] = useState<any[]>([]);
+  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [activeFilterColumn, setActiveFilterColumn] = useState<string | null>(null);
+
+  const handleFilterClick = (columnKey: string) => {
     setActiveFilterColumn((prev) => (prev === columnKey ? null : columnKey));
   };
 
@@ -21,24 +53,29 @@ const ReactTable = ({ tableData, setTableData }) => {
 
   useEffect(() => {
     if (tableData.length > 0) {
-      const generatedColumns = Object.keys(tableData[0]).map((key) => {
-        const baseColumn = {
+      const generatedColumns: ColumnDef<InventoryItem, any>[] = Object.keys(tableData[0]).map((key) => {
+        const baseColumn: ColumnDef<InventoryItem, any> = {
           accessorKey: key,
-          header: key.replace(/_/g, " ").toUpperCase(),
+          header: key.replace(/_/g, ' ').toUpperCase(),
           filterFn: (row, columnId, filterValue) => {
-            if (filterValue.length === 0) {
-              return false;
-            }
+            if (filterValue.length === 0) return false;
             return filterValue.includes(String(row.getValue(columnId)));
           },
         };
 
-        if (key === "scanned") {
-          baseColumn.cell = (info) => (
-            <div className="checkbox-wrapper">
-              <input type="checkbox" checked={info.getValue()} readOnly />
-            </div>
-          );
+        if (key === 'scanned') {
+          baseColumn.cell = (info) => {
+            const value = info.getValue();
+            return (
+              <div className="checkbox-wrapper">
+                <input
+                  type="checkbox"
+                  checked={Boolean(value)}
+                  readOnly
+                />
+              </div>
+            );
+          };
         }
 
         return baseColumn;
@@ -69,7 +106,7 @@ const ReactTable = ({ tableData, setTableData }) => {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
-                const columnKey = header.column.columnDef.accessorKey;
+                const columnKey = header.column.id;
                 const isActive = activeFilterColumn === columnKey;
                 const isFiltered = columnFilters.some((filter) => filter.id === columnKey);
 
@@ -87,7 +124,7 @@ const ReactTable = ({ tableData, setTableData }) => {
                           <FilterMenu
                             isOpen={activeFilterColumn === columnKey}
                             onClose={closeMenu}
-                            data={columnFilters.some((filter) => filter.id === columnKey) ? tableData : tableData}
+                            data={tableData}
                             columnName={columnKey}
                             filters={filters}
                             setFilters={setFilters}
@@ -108,9 +145,7 @@ const ReactTable = ({ tableData, setTableData }) => {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
               ))}
             </tr>
           ))}

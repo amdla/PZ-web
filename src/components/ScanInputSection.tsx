@@ -1,30 +1,13 @@
-import React, { useState } from 'react';
 import './ScanInputSection.css';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store';
+import { markScanned } from '../features/inventory/inventorySlice';
 
-interface InventoryItem {
-  id: number;
-  inventory: number;
-  department: number;
-  asset_group: number;
-  category: string;
-  inventory_number: string;
-  asset_component: number;
-  sub_number: number;
-  acquisition_date: string;
-  asset_description: string;
-  quantity: number;
-  initial_value: string;
-  room: string;
-  new_room: string;
-  scanned: boolean;
-}
+function ScanInputSection() {
+  const dispatch = useDispatch();
+  const tableData = useSelector((state: RootState) => state.inventory.items);
 
-interface Props {
-  tableData: InventoryItem[];
-  setTableData: React.Dispatch<React.SetStateAction<InventoryItem[]>>;
-}
-
-function ScanInputSection({ tableData, setTableData }: Props) {
   const [assetCode, setAssetCode] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
 
@@ -34,24 +17,13 @@ function ScanInputSection({ tableData, setTableData }: Props) {
       return;
     }
 
-    const updatedData = tableData.map((item) => {
-      if (item.asset_component.toString() === assetCode) {
-        return {
-          ...item,
-          scanned: true,
-          new_room: roomNumber,
-        };
-      }
-      return item;
-    });
-
-    const itemFound = tableData.some((item) => item.asset_component.toString() === assetCode);
-
-    if (!itemFound) {
+    const exists = tableData.some(item => item.asset_component.toString() === assetCode);
+    if (!exists) {
       alert("Nie znaleziono przedmiotu o podanym kodzie!");
+      return;
     }
 
-    setTableData(updatedData);
+    dispatch(markScanned({ asset_component: Number(assetCode), new_room: roomNumber }));
     setAssetCode('');
     setRoomNumber('');
   };
@@ -77,6 +49,6 @@ function ScanInputSection({ tableData, setTableData }: Props) {
       </button>
     </div>
   );
-};
+}
 
 export default ScanInputSection;

@@ -6,14 +6,17 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   ColumnDef,
-  Table,
-  Header,
 } from '@tanstack/react-table';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
+import { setColumnFilters, setSorting } from '../features/inventory/inventorySlice';
 import './ReactTable.css';
 import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
 import filterIconActive from '../icons/filter-active.png';
 import FilterMenu from './FilterMenu';
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
+
 
 interface InventoryItem {
   id: number;
@@ -33,15 +36,13 @@ interface InventoryItem {
   scanned: boolean;
 }
 
-interface ReactTableProps {
-  tableData: InventoryItem[];
-  setTableData: React.Dispatch<React.SetStateAction<InventoryItem[]>>;
-}
+const ReactTable: React.FC = () => {
+  const dispatch = useDispatch();
+  const tableData = useSelector((state: RootState) => state.inventory.items);
+  const columnFilters = useSelector((state: RootState) => state.inventory.columnFilters);
+  const sorting = useSelector((state: RootState) => state.inventory.sorting);
 
-const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
   const [columns, setColumns] = useState<ColumnDef<InventoryItem, any>[]>([]);
-  const [columnFilters, setColumnFilters] = useState<any[]>([]);
-  const [sorting, setSorting] = useState<any[]>([]);
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [activeFilterColumn, setActiveFilterColumn] = useState<string | null>(null);
 
@@ -95,8 +96,11 @@ const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
       columnFilters,
       sorting,
     },
-    onColumnFiltersChange: setColumnFilters,
-    onSortingChange: setSorting,
+    onColumnFiltersChange: (updater) =>
+      dispatch(setColumnFilters(typeof updater === 'function' ? updater(columnFilters) : updater)),
+    onSortingChange: (updater) =>
+      dispatch(setSorting(typeof updater === 'function' ? updater(sorting) : updater)),
+    
   });
 
   return (
@@ -128,8 +132,8 @@ const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
                             columnName={columnKey}
                             filters={filters}
                             setFilters={setFilters}
-                            setColumnFilters={setColumnFilters}
-                            setSorting={setSorting}
+                            setColumnFilters={(filters: ColumnFiltersState) => dispatch(setColumnFilters(filters))}
+                            setSorting={(sorting: SortingState) => dispatch(setSorting(sorting))}
                             sorting={sorting}
                           />
                         )}

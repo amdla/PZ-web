@@ -180,38 +180,96 @@ function MainPage() {
     });
   };
 
-  // Funkcja wysyłająca dane do backendu (bez zmian)
-  const sendDataToBackend = async (data) => {
+  // Funkcja wysyłająca dane do backendu
+  const sendDataToBackend = async (itemsData) => {
     const csrftoken = getCookie("csrftoken");
-
+    const inventoryName = `SAP Upload ${
+      new Date().toISOString().split("T")[0]
+    }`;
+    const currentDate = new Date().toISOString().split("T")[0];
+    // Tworzenie nowego inwentarza
     try {
-      const response = await fetch("http://localhost:8000/api/upload_sap/", {
+      const inventoryResponse = await fetch(
+        "http://localhost:8000/inventories/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrftoken,
+          },
+          body: JSON.stringify({
+            name: inventoryName,
+            date: currentDate,
+          }),
+          credentials: "include",
+        }
+      );
+
+      if (!inventoryResponse.ok) {
+        let errorData = {
+          detail: `Błąd serwera przy tworzeniu inwentarza: ${inventoryResponse.statusText}`,
+        };
+        try {
+          errorData = await inventoryResponse.json();
+        } catch (e) {
+          console.error("Odpowiedź serwera (inwentarz) nie jest JSONem:", e);
+        }
+        const errorMessage =
+          errorData.detail ||
+          JSON.stringify(errorData) ||
+          inventoryResponse.statusText;
+        throw new Error(
+          `Błąd backendu (tworzenie inwentarza): ${inventoryResponse.status} - ${errorMessage}`
+        );
+      }
+
+      const newInventory = await inventoryResponse.json();
+      const newInventoryId = newInventory.id;
+
+      // Każdy wiersz musi mieć inventoryId
+      const itemsWithInventoryId = itemsData.map((item) => ({
+        ...item,
+        inventory: newInventoryId,
+      }));
+
+      console.log(
+        `Krok 2: Wysyłanie ${itemsWithInventoryId.length} przedmiotów do inwentarza ID: ${newInventoryId}...`
+      );
+      const itemsResponse = await fetch("http://localhost:8000/items/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-CSRFToken": csrftoken,
         },
-        body: JSON.stringify({
-          name: `SAP Upload ${new Date().toISOString().split("T")[0]}`,
-          items: data,
-        }),
+        body: JSON.stringify(itemsWithInventoryId),
         credentials: "include",
       });
 
-      // Sprawdź, czy odpowiedź nie jest błędem
-      if (!response.ok) {
-        let errorData = { detail: `Błąd serwera: ${response.statusText}` };
+      if (!itemsResponse.ok) {
+        let errorData = {
+          detail: `Błąd serwera przy tworzeniu przedmiotów: ${itemsResponse.statusText}`,
+        };
         try {
-          errorData = await response.json();
+          errorData = await itemsResponse.json();
         } catch (e) {
-          console.error("Odpowiedź serwera nie jest JSONem:", e);
+          console.error("Odpowiedź serwera (przedmioty) nie jest JSONem:", e);
         }
         const errorMessage =
-          errorData.detail || JSON.stringify(errorData) || response.statusText;
-        throw new Error(`Błąd backendu: ${response.status} - ${errorMessage}`);
+          errorData.detail ||
+          JSON.stringify(errorData) ||
+          itemsResponse.statusText;
+        throw new Error(
+          `Błąd backendu (tworzenie przedmiotów): ${itemsResponse.status} - ${errorMessage}`
+        );
       }
+
+      const createdItems = await itemsResponse.json();
+      alert(
+        `Import zakończony pomyślnie! Utworzono inwentarz "${inventoryName}" z ${createdItems.length} przedmiotami.`
+      );
     } catch (error) {
-      console.error("Błąd podczas wysyłania danych:", error);
+      console.error("Błąd podczas wysyłania danych do backendu:", error);
+      alert(`Wysyłanie nieudane: ${error.message}`);
     }
   };
 

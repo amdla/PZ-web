@@ -1,5 +1,5 @@
 /* global BigInt */
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import "./MainPage.css";
 import Header from "../components/Header";
@@ -8,9 +8,14 @@ import { getCookie } from "../utils/utils";
 
 function MainPage() {
   const fileInputRef = useRef(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleUploadClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleUploadSuccess = () => {
+    setRefreshTrigger(prevTrigger => prevTrigger + 1);
   };
 
   const handleFileChange = (event) => {
@@ -28,7 +33,7 @@ function MainPage() {
         });
 
         const formattedData = formatData(jsonData);
-        sendDataToBackend(formattedData);
+        sendDataToBackend(formattedData, handleUploadSuccess);
       } catch (error) {
         console.error("Błąd podczas przetwarzania pliku Excel:", error);
         alert(`Błąd podczas przetwarzania pliku: ${error.message}`);
@@ -181,7 +186,7 @@ function MainPage() {
   };
 
   // Funkcja wysyłająca dane do backendu
-  const sendDataToBackend = async (itemsData) => {
+  const sendDataToBackend = async (itemsData, onSuccess) => {
     const csrftoken = getCookie("csrftoken");
     const inventoryName = `SAP Upload ${
       new Date().toISOString().split("T")[0]
@@ -267,6 +272,7 @@ function MainPage() {
       alert(
         `Import zakończony pomyślnie! Utworzono inwentarz "${inventoryName}" z ${createdItems.length} przedmiotami.`
       );
+      onSuccess();
     } catch (error) {
       console.error("Błąd podczas wysyłania danych do backendu:", error);
       alert(`Wysyłanie nieudane: ${error.message}`);
@@ -277,7 +283,7 @@ function MainPage() {
     <div className="page">
       <Header />
       <div className="page-body">
-        <VersionList />
+        <VersionList refreshTrigger={refreshTrigger}/>
         <input
           type="file"
           ref={fileInputRef}

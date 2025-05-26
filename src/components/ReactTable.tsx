@@ -55,35 +55,34 @@ const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
 
   useEffect(() => {
     if (tableData.length > 0) {
-      const generatedColumns: ColumnDef<InventoryItem, any>[] = Object.keys(tableData[0]).map((key) => {
-        const baseColumn: ColumnDef<InventoryItem, any> = {
-          accessorKey: key,
-          header: key.replace(/_/g, ' ').toUpperCase(),
-          filterFn: (row, columnId, filterValue) => {
+      const keys = Object.keys(tableData[0]) as (keyof InventoryItem)[];
+
+      const generatedColumns: ColumnDef<InventoryItem, any>[] = keys.map((key) => ({
+        accessorKey: key,
+        header: headerMap[key] || key.replace(/_/g, ' ').toUpperCase(),
+        filterFn: (row, columnId, filterValue) => {
             if (filterValue.length === 0) return false;
             return filterValue.includes(String(row.getValue(columnId)));
           },
-        };
-
-        if (key === 'scanned') {
-          baseColumn.cell = (info) => {
+        cell: (info) => {
             const value = info.getValue();
+            if (key === 'scanned') {
             return (
-              <div className="checkbox-wrapper">
+                <div className="checkbox-wrapper">
                 <input
-                  type="checkbox"
-                  checked={Boolean(value)}
-                  readOnly
+                    type="checkbox"
+                    checked={Boolean(value)}
+                    readOnly
                 />
-              </div>
+                </div>
             );
-          };
+            }
+            return String(value);
         }
-
-        return baseColumn;
-      });
-
+      }));
       setColumns(generatedColumns);
+    } else {
+      setColumns([]);
     }
   }, [tableData]);
 

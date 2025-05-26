@@ -14,29 +14,31 @@ import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
 import filterIconActive from '../icons/filter-active.png';
 import FilterMenu from './FilterMenu';
-
-interface InventoryItem {
-  id: number;
-  inventory: number;
-  department: number;
-  asset_group: number;
-  category: string;
-  inventory_number: string;
-  asset_component: number;
-  sub_number: number;
-  acquisition_date: string;
-  asset_description: string;
-  quantity: number;
-  initial_value: string;
-  room: string;
-  new_room: string;
-  scanned: boolean;
-}
+import { InventoryItem } from '../types'; 
 
 interface ReactTableProps {
   tableData: InventoryItem[];
   setTableData: React.Dispatch<React.SetStateAction<InventoryItem[]>>;
 }
+
+// 2. ZMIANA TUTAJ: (Opcjonalnie) Dodaj mapę dla ładniejszych nagłówków
+const headerMap: Record<string, string> = {
+  id: 'ID',
+  inventory: 'Inwentarz ID',
+  department: 'Dział',
+  asset_group: 'Grupa Aktywów',
+  category: 'Kategoria',
+  inventory_number: 'Numer Inwentarzowy',
+  asset_component: 'Składnik Aktywów',
+  sub_number: 'Podnumer',
+  acquisition_date: 'Data Nabycia',
+  asset_description: 'Opis',
+  quantity: 'Ilość',
+  initial_value: 'Wartość Początkowa',
+  lastInventoryRoom: 'Poprzednie Pomieszczenie',
+  currentRoom: 'Obecne Pomieszczenie',
+  scanned: 'Zeskanowano',
+};
 
 const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
   const [columns, setColumns] = useState<ColumnDef<InventoryItem, any>[]>([]);
@@ -53,37 +55,38 @@ const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
 
   useEffect(() => {
     if (tableData.length > 0) {
-      const generatedColumns: ColumnDef<InventoryItem, any>[] = Object.keys(tableData[0]).map((key) => {
-        const baseColumn: ColumnDef<InventoryItem, any> = {
-          accessorKey: key,
-          header: key.replace(/_/g, ' ').toUpperCase(),
-          filterFn: (row, columnId, filterValue) => {
+      const keys = Object.keys(tableData[0]) as (keyof InventoryItem)[];
+
+      const generatedColumns: ColumnDef<InventoryItem, any>[] = keys.map((key) => ({
+        accessorKey: key,
+        header: headerMap[key] || key.replace(/_/g, ' ').toUpperCase(),
+        filterFn: (row, columnId, filterValue) => {
             if (filterValue.length === 0) return false;
             return filterValue.includes(String(row.getValue(columnId)));
           },
-        };
-
-        if (key === 'scanned') {
-          baseColumn.cell = (info) => {
+        cell: (info) => {
             const value = info.getValue();
+            if (key === 'scanned') {
             return (
-              <div className="checkbox-wrapper">
+                <div className="checkbox-wrapper">
                 <input
-                  type="checkbox"
-                  checked={Boolean(value)}
-                  readOnly
+                    type="checkbox"
+                    checked={Boolean(value)}
+                    readOnly
                 />
-              </div>
+                </div>
             );
-          };
+            }
+            return String(value);
         }
-
-        return baseColumn;
-      });
-
+      }));
       setColumns(generatedColumns);
+    } else {
+      setColumns([]);
     }
   }, [tableData]);
+
+  
 
   const table = useReactTable({
     data: tableData,

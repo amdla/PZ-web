@@ -10,7 +10,7 @@ function VersionCard({ inventory }) {
   }
 
   const handleClick = () => {
-    navigate(`/inventory`);
+    navigate(`/inventory/${inventory.id}`); 
   };
 
   const handleGenerateClick = (e) => {

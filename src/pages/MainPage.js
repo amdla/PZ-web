@@ -82,8 +82,8 @@ function MainPage() {
       asset_description: findHeaderIndex(["oznaczenie aktywów trwałych"]),
       quantity: findHeaderIndex(["ilość", "ilosc"]),
       initial_value: findHeaderIndex(["WartPocz", "wartosc"]),
-      lastInventoryRoom: findHeaderIndex(["poprzednie pomieszczenie"]),
-      currentRoom: findHeaderIndex(["pomieszczenie"]),
+      lastInventoryRoom: findHeaderIndex(["pomieszczenie"]),
+      currentRoom: findHeaderIndex(["poprzednie pomieszczenie"]),
     };
 
     const criticalHeaders = {
@@ -94,7 +94,7 @@ function MainPage() {
       asset_description: "Oznaczenie aktywów trwałych",
       quantity: "Ilość",
       initial_value: "WartPocz",
-      currentRoom: "Pomieszczenie",
+      lastInventoryRoom: "pomieszczenie",
     };
 
     for (const key in criticalHeaders) {
@@ -115,7 +115,7 @@ function MainPage() {
         if (indices[key] !== -1) {
           excelValue = row[indices[key]];
         } else {
-          item[key] = "a";
+          item[key] = "null";
           continue;
         }
 

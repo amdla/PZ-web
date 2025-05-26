@@ -13,7 +13,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainPage />} />
-          <Route path="/inventory" element={<InventoryPage />} />
+          <Route path="/inventory/:inventoryId" element={<InventoryPage />} />
         </Route>
       </Routes>
     </AuthProvider>

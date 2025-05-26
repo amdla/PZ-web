@@ -2,38 +2,44 @@ import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import ReactTable from '../components/ReactTable';
 import ScanInputSection from '../components/ScanInputSection';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './InventoryPage.css';
 import myIcon from '../icons/back.png';
+import { InventoryItem } from '../types'; 
 
-interface InventoryItem {
-  id: number;
-  inventory: number;
-  department: number;
-  asset_group: number;
-  category: string;
-  inventory_number: string;
-  asset_component: number;
-  sub_number: number;
-  acquisition_date: string;
-  asset_description: string;
-  quantity: number;
-  initial_value: string;
-  room: string;
-  new_room: string;
-  scanned: boolean;
-}
 
 function InventoryPage() {
   const navigate = useNavigate();
+  const { inventoryId } = useParams<{ inventoryId: string }>(); 
   const [tableData, setTableData] = useState<InventoryItem[]>([]);
 
   useEffect(() => {
-    fetch('/inventoryData.json')
-      .then((response) => response.json())
-      .then((data: InventoryItem[]) => setTableData(data))
-      .catch((error) => console.error("Error loading JSON:", error));
-  }, []);
+    if (inventoryId) {
+      fetch(`http://localhost:8000/items/?inventory_id=${inventoryId}`, {
+          credentials: "include", 
+      })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Błąd sieci: ${response.status} - ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then((data: Omit<InventoryItem, 'scanned'>[]) => {
+            const enhancedData = data.map(item => ({
+                ...item,
+                scanned: false 
+            }));
+            setTableData(enhancedData);
+        })
+        // jak dodadzą scanned od backendu to trzeba te górne .then zamienić na to:
+        //  .then((data: InventoryItem[]) => { 
+        //     setTableData(data);
+        // })
+        .catch((error) => {
+            console.error("Error loading inventory items:", error);
+        });
+    } 
+  }, [inventoryId]); 
 
   return (
     <div>

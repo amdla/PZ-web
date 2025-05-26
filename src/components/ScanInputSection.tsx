@@ -1,23 +1,6 @@
 import React, { useState } from 'react';
 import './ScanInputSection.css';
-
-interface InventoryItem {
-  id: number;
-  inventory: number;
-  department: number;
-  asset_group: number;
-  category: string;
-  inventory_number: string;
-  asset_component: number;
-  sub_number: number;
-  acquisition_date: string;
-  asset_description: string;
-  quantity: number;
-  initial_value: string;
-  room: string;
-  new_room: string;
-  scanned: boolean;
-}
+import { InventoryItem } from '../types'; 
 
 interface Props {
   tableData: InventoryItem[];
@@ -39,7 +22,7 @@ function ScanInputSection({ tableData, setTableData }: Props) {
         return {
           ...item,
           scanned: true,
-          new_room: roomNumber,
+          currentRoom: roomNumber, 
         };
       }
       return item;

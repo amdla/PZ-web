@@ -1,5 +1,6 @@
 import './VersionCard.css';
 import { useNavigate } from 'react-router-dom';
+import { generateXlsxFromItems } from '../utils/generateXlsx'; 
 
 function VersionCard({ inventory }) {
   const navigate = useNavigate();
@@ -13,12 +14,26 @@ function VersionCard({ inventory }) {
     navigate(`/inventory/${inventory.id}`); 
   };
 
-  const handleGenerateClick = (e) => {
-      e.stopPropagation();
-      // Tutaj logika generowania Excela dla inventory.id
-      alert(`Rozpocznij generowanie Excela dla inwentarza: ${inventory.name} (ID: ${inventory.id})`);
-      // Możesz wywołać funkcję, która wyśle zapytanie do API o wygenerowanie pliku
-  };
+ const handleGenerateClick = async (e) => {
+  e.stopPropagation();
+
+  try {
+    const response = await fetch(`http://localhost:8000/items/?inventory_id=${inventory.id}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Błąd przy pobieraniu danych z API');
+    }
+
+    const items = await response.json();
+    generateXlsxFromItems(items, `${inventory.name}.xlsx`);
+  } catch (err) {
+    console.error(err);
+    alert('Nie udało się wygenerować pliku Excel.');
+  }
+};
 
   return (
     <div className='version-card-div' onClick={handleClick} style={{ cursor: 'pointer' }}>

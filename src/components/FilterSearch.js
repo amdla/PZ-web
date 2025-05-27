@@ -6,7 +6,22 @@ function FilterSearch({data, columnName, filters, setFilters, setColumnFilters, 
 
   const [searchTerm, setSearchTerm] = useState('');
 
-  const uniqueValues = [...new Set(data.map(item => String(item[columnName])))];
+  const filteredData = data.filter(item => {
+    return Object.entries(filters).every(([key, val]) => {
+      if (key === columnName || !val) return true;
+
+      const selected = Object.entries(val)
+        .filter(([k, v]) => k !== 'selectAll' && v)
+        .map(([k]) => k);
+
+      const allValues = [...new Set(data.map(row => String(row[key])))];
+      if (selected.length === allValues.length) return true;
+
+      return selected.includes(String(item[key]));
+    });
+  });  
+  const uniqueValues = [...new Set(filteredData.map(item => String(item[columnName])))];
+  //const uniqueValues = [...new Set(data.map(item => String(item[columnName])))];
 
   const displayedUniqueValues = uniqueValues.filter(value =>
     value.toString().toLowerCase().includes(searchTerm.toLowerCase())

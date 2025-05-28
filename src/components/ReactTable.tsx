@@ -2,26 +2,23 @@ import React, { useEffect, useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
-  flexRender,
   getFilteredRowModel,
   getSortedRowModel,
+  flexRender,
   ColumnDef,
-  Table,
-  Header,
 } from '@tanstack/react-table';
 import './ReactTable.css';
 import filterIconFill from '../icons/filter-fill.png';
 import filterIconEmpty from '../icons/filter-empty.png';
 import filterIconActive from '../icons/filter-active.png';
 import FilterMenu from './FilterMenu';
-import { InventoryItem } from '../types'; 
+import { InventoryItem } from '../types';
 
 interface ReactTableProps {
   tableData: InventoryItem[];
   setTableData: React.Dispatch<React.SetStateAction<InventoryItem[]>>;
 }
 
-// 2. ZMIANA TUTAJ: (Opcjonalnie) Dodaj mapę dla ładniejszych nagłówków
 const headerMap: Record<string, string> = {
   id: 'ID',
   inventory: 'Inwentarz ID',
@@ -40,7 +37,7 @@ const headerMap: Record<string, string> = {
   scanned: 'Zeskanowano',
 };
 
-const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
+const ReactTable: React.FC<ReactTableProps> = ({ tableData }) => {
   const [columns, setColumns] = useState<ColumnDef<InventoryItem, any>[]>([]);
   const [columnFilters, setColumnFilters] = useState<any[]>([]);
   const [sorting, setSorting] = useState<any[]>([]);
@@ -56,41 +53,32 @@ const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
   useEffect(() => {
     if (tableData.length > 0) {
       const keys = Object.keys(tableData[0]) as (keyof InventoryItem)[];
-
       const generatedColumns: ColumnDef<InventoryItem, any>[] = keys.map((key) => ({
         accessorKey: key,
         header: headerMap[key] || key.replace(/_/g, ' ').toUpperCase(),
         filterFn: (row, columnId, filterValue) => {
-            if (filterValue.length === 0) return false;
-            return filterValue.includes(String(row.getValue(columnId)));
-          },
+          if (!filterValue?.length) return true;
+          return filterValue.includes(String(row.getValue(columnId)));
+        },
         cell: (info) => {
-            const value = info.getValue();
-            if (key === 'scanned') {
+          const value = info.getValue();
+          if (key === 'scanned') {
             return (
-                <div className="checkbox-wrapper">
-                <input
-                    type="checkbox"
-                    checked={Boolean(value)}
-                    readOnly
-                />
-                </div>
+              <div className="checkbox-wrapper">
+                <input type="checkbox" checked={Boolean(value)} readOnly />
+              </div>
             );
-            }
-            return String(value);
-        }
+          }
+          return String(value);
+        },
       }));
       setColumns(generatedColumns);
-    } else {
-      setColumns([]);
     }
   }, [tableData]);
 
-  
-
   const table = useReactTable({
     data: tableData,
-    columns: columns,
+    columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -112,7 +100,6 @@ const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
                 const columnKey = header.column.id;
                 const isActive = activeFilterColumn === columnKey;
                 const isFiltered = columnFilters.some((filter) => filter.id === columnKey);
-
                 return (
                   <th key={header.id}>
                     <div className="table-header">
@@ -123,11 +110,11 @@ const ReactTable: React.FC<ReactTableProps> = ({ tableData, setTableData }) => {
                           alt="filter"
                           onClick={() => handleFilterClick(columnKey)}
                         />
-                        {activeFilterColumn === columnKey && (
+                        {isActive && (
                           <FilterMenu
-                            isOpen={activeFilterColumn === columnKey}
+                            isOpen={true}
                             onClose={closeMenu}
-                            data={tableData}
+                            data={table.getFilteredRowModel().rows.map(r => r.original)} // ✅ dynamiczne dane
                             columnName={columnKey}
                             filters={filters}
                             setFilters={setFilters}

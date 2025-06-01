@@ -235,7 +235,6 @@ function MainPage() {
       const itemsWithInventoryId = itemsData.map((item) => ({
         ...item,
         inventory: newInventoryId,
-        //currentRoom: "",
         scanned: false,
       }));
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ScanInputSection.css';
 import { InventoryItem } from '../types'; 
+import { getCookie } from '../utils/utils';
 
 interface Props {
   tableData: InventoryItem[];
@@ -11,6 +12,27 @@ function ScanInputSection({ tableData, setTableData }: Props) {
   const [assetCode, setAssetCode] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
 
+  const updateItemInBackend = async (itemId: number, payload: Partial<InventoryItem>) => {
+    try {
+      const response = await fetch(`http://localhost:8000/items/${itemId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken') || '',
+        },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Błąd zapisu (kod: ${response.status})`);
+      }
+    } catch (error) {
+      console.error('Błąd przy aktualizacji w backendzie:', error);
+      alert(`Nie udało się zapisać zeskanowanego przedmiotu: ${error}`);
+    }
+  }; 
+  
   const handleScan = () => {
     if (!assetCode || !roomNumber) {
       alert("Wprowadź kod przedmiotu i numer sali!");
@@ -19,6 +41,12 @@ function ScanInputSection({ tableData, setTableData }: Props) {
 
     const updatedData = tableData.map((item) => {
       if (item.asset_component.toString() === assetCode) {
+
+        updateItemInBackend(item.id, {
+          scanned: true,
+          currentRoom: roomNumber,
+        });
+
         return {
           ...item,
           scanned: true,

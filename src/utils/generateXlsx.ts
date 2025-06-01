@@ -1,23 +1,6 @@
 import * as XLSX from 'xlsx';
 import { InventoryItem } from '../types';
 
-// export interface InventoryItem {
-//   id: number;
-//   inventory: number;
-//   department: number;
-//   asset_group: number;
-//   category: string;
-//   inventory_number: string;
-//   asset_component: string;
-//   sub_number: number;
-//   acquisition_date: string;
-//   asset_description: string;
-//   quantity: number;
-//   initial_value: number;
-//   lastInventoryRoom: string;
-//   currentRoom: string;
-// }
-
 export const generateXlsxFromItems = (items: InventoryItem[], filename = 'raport.xlsx') => {
   if (!items || items.length === 0) {
     alert('Brak danych do eksportu.');

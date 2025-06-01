@@ -11,20 +11,25 @@ export const AuthProvider = ({ children }) => {
   const checkAuth = async () => {
     setAuth(prev => ({ ...prev, loading: true }));
     try {
-      const response = await fetch('http://localhost:8000/api/check-auth/', { // Użyj ścieżki z Django
-          credentials: 'include', // Ważne!
+      const response = await fetch('http://localhost:8000/user/status/', {
+        credentials: 'include',
       });
+
       if (response.ok) {
         const data = await response.json();
-        setAuth({ isAuthenticated: true, user: data.user, loading: false });
+        setAuth({ isAuthenticated: true, user: data, loading: false });
+        return true;
       } else {
         setAuth({ isAuthenticated: false, user: null, loading: false });
+        return false;
       }
     } catch (error) {
       console.error("Błąd sprawdzania statusu logowania:", error);
       setAuth({ isAuthenticated: false, user: null, loading: false });
+      return false;
     }
   };
+
 
   // Funkcja do wylogowania
   const handleLogout = async () => {

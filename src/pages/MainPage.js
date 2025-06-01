@@ -20,6 +20,7 @@ function MainPage() {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    const fileName = file.name.replace(/\.[^/.]+$/, "");
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
@@ -33,7 +34,7 @@ function MainPage() {
         });
 
         const formattedData = formatData(jsonData);
-        sendDataToBackend(formattedData, handleUploadSuccess);
+        sendDataToBackend(formattedData, handleUploadSuccess, fileName);
       } catch (error) {
         console.error("Błąd podczas przetwarzania pliku Excel:", error);
         alert(`Błąd podczas przetwarzania pliku: ${error.message}`);
@@ -186,11 +187,9 @@ function MainPage() {
   };
 
   // Funkcja wysyłająca dane do backendu
-  const sendDataToBackend = async (itemsData, onSuccess) => {
+  const sendDataToBackend = async (itemsData, onSuccess, fileName) => {
     const csrftoken = getCookie("csrftoken");
-    const inventoryName = `SAP Upload ${
-      new Date().toISOString().split("T")[0]
-    }`;
+    const inventoryName = `${fileName} - ${new Date().toISOString().split("T")[0]}`;
     const currentDate = new Date().toISOString().split("T")[0];
     // Tworzenie nowego inwentarza
     try {

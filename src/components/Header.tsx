@@ -11,7 +11,7 @@ function Header() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/check-auth/', {
+        const response = await fetch('http://localhost:8000/user/status/', {
           method: 'GET',
           credentials: 'include',
         });
@@ -19,8 +19,8 @@ function Header() {
         if (!response.ok) throw new Error('Nie udało się pobrać danych użytkownika');
 
         const data = await response.json();
-        if (data.isAuthenticated && data.user?.username) {
-          const usosId = data.user.username.replace('usos_', '');
+        if (data.username) {
+          const usosId = data.username.replace('usos_', '');
           setUserName(`${usosId}@pw.edu.pl`);
         }
       } catch (error) {

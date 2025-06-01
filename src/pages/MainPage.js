@@ -115,7 +115,7 @@ function MainPage() {
         if (indices[key] !== -1) {
           excelValue = row[indices[key]];
         } else {
-          item[key] = "null";
+          item[key] = "";
           continue;
         }
 
@@ -235,6 +235,8 @@ function MainPage() {
       const itemsWithInventoryId = itemsData.map((item) => ({
         ...item,
         inventory: newInventoryId,
+        //currentRoom: "",
+        scanned: false,
       }));
 
       console.log(

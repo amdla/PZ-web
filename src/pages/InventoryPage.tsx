@@ -24,17 +24,18 @@ function InventoryPage() {
             }
             return response.json();
         })
-        .then((data: Omit<InventoryItem, 'scanned'>[]) => {
-            const enhancedData = data.map(item => ({
-                ...item,
-                scanned: false 
-            }));
-            setTableData(enhancedData);
-        })
-        // jak dodadzą scanned od backendu to trzeba te górne .then zamienić na to:
-        //  .then((data: InventoryItem[]) => { 
-        //     setTableData(data);
+        // .then((data: Omit<InventoryItem, 'scanned'>[]) => {
+        //     const enhancedData = data.map(item => ({
+        //         ...item,
+        //         scanned: false 
+        //     }));
+        //     setTableData(enhancedData);
         // })
+        // jak dodadzą scanned od backendu to trzeba te górne .then zamienić na to:
+        .then((data: InventoryItem[]) => { 
+            setTableData(data);
+            console.log(data);
+        })
         .catch((error) => {
             console.error("Error loading inventory items:", error);
         });

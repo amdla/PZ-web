@@ -5,21 +5,30 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    const redirect = encodeURIComponent('http://localhost:3000/oauth/callback/');
-    window.location.href = `http://localhost:8000/oauth/login/?redirect_uri=${redirect}`;
+    const popup = window.open(
+      "http://localhost:8000/oauth/login/",
+      "OAuthLogin",
+      "width=600,height=700"
+    );
+
+    const receiveMessage = (event) => {
+      if (event.origin !== "http://localhost:3000") return;
+
+      const user = event.data;
+      if (user && user.id) {
+        localStorage.setItem("user", JSON.stringify(user));
+        navigate("/"); // 🚀 przekieruj na stronę główną
+      } else {
+        alert("Błąd logowania");
+        navigate("/login");
+      }
+
+      window.removeEventListener("message", receiveMessage);
+    };
+
+    window.addEventListener("message", receiveMessage);
   };
 
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("oauth_token");
-    const verifier = params.get("oauth_verifier");
-
-    if (token && verifier) {
-      // Jeśli wróciłeś z USOS i masz tokeny w URL, przekieruj na /oauth/callback/
-      navigate('/oauth/callback' + window.location.search);
-    }
-  }, [navigate]);
 
   return (
     <div style={{ padding: '50px', textAlign: 'center' }}>

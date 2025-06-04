@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
 
-interface UserData {
-  email: string;
-}
-
 function Header() {
   const [userName, setUserName] = useState<string | null>(null);
 
@@ -31,6 +27,25 @@ function Header() {
     fetchUserData();
 }, []);
 
+const handleLogout = async () => {
+  try {
+    const response = await fetch('http://localhost:8000/logout/', {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    if (response.ok) {
+      window.location.href = '/login';
+    } else {
+      throw new Error('Błąd wylogowania');
+    }
+  } catch (error) {
+    console.error('Błąd podczas wylogowywania:', error);
+    alert('Nie udało się wylogować.');
+  }
+};
+
+
   return (
     <header className="page-header">
       <div className='flex-row'>
@@ -39,7 +54,9 @@ function Header() {
             ? `Zalogowano jako ${userName}`
             : 'Trwa sprawdzanie logowania...'}
         </p>
-        <button className='black-button' id='logout'>Wyloguj</button>
+        <button className='black-button' id='logout' onClick={handleLogout}>
+          Wyloguj
+        </button>
       </div>
     </header>
   );

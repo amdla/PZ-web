@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>Przekierowanie...</title></head>
+<body>
+  <script>
+    fetch("http://localhost:8000/api/user-info", {
+      credentials: "include",
+    })
+      .then(res => res.json())
+      .then(user => {
+        window.opener.postMessage(user, "http://localhost:3000");
+        window.close();
+      })
+      .catch(() => {
+        window.opener.postMessage({ error: true }, "http://localhost:3000");
+        window.close();
+      });
+  </script>
+</body>
+</html>

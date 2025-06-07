@@ -26,7 +26,7 @@ const headerMap: Record<string, string> = {
   asset_group: 'Grupa Aktywów',
   category: 'Kategoria',
   inventory_number: 'Numer Inwentarzowy',
-  asset_component: 'Składnik Aktywów',
+  asset_component: 'Kod przedmiotu',
   sub_number: 'Podnumer',
   acquisition_date: 'Data Nabycia',
   asset_description: 'Opis',

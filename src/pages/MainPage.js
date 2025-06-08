@@ -5,6 +5,7 @@ import "./MainPage.css";
 import Header from "../components/Header";
 import VersionList from "../components/VersionList";
 import { getCookie } from "../utils/utils";
+import myIcon from '../icons/upload.png';
 
 function MainPage() {
   const fileInputRef = useRef(null);
@@ -283,7 +284,10 @@ function MainPage() {
     <div className="page">
       <Header />
       <div className="page-body">
-        <VersionList refreshTrigger={refreshTrigger}/>
+      <VersionList 
+        refreshTrigger={refreshTrigger} 
+        onDelete={() => setRefreshTrigger(prev => prev + 1)} 
+      />
         <input
           type="file"
           ref={fileInputRef}
@@ -293,6 +297,11 @@ function MainPage() {
         />
         <button className="black-button" onClick={handleUploadClick}>
           Wczytaj plik SAP
+        <img
+            src={myIcon}
+            alt="Usuń"
+            style={{filter: 'invert(1)', width: '18px', height: '18px' }}
+        />
         </button>
       </div>
     </div>

@@ -12,6 +12,7 @@ function InventoryPage() {
   const navigate = useNavigate();
   const { inventoryId } = useParams<{ inventoryId: string }>(); 
   const [tableData, setTableData] = useState<InventoryItem[]>([]);
+  const [inventoryName, setInventoryName] = useState<string | null>(null);
 
   useEffect(() => {
     if (inventoryId) {
@@ -24,14 +25,6 @@ function InventoryPage() {
             }
             return response.json();
         })
-        // .then((data: Omit<InventoryItem, 'scanned'>[]) => {
-        //     const enhancedData = data.map(item => ({
-        //         ...item,
-        //         scanned: false 
-        //     }));
-        //     setTableData(enhancedData);
-        // })
-        // jak dodadzą scanned od backendu to trzeba te górne .then zamienić na to:
         .then((data: InventoryItem[]) => { 
             setTableData(data);
             console.log(data);
@@ -39,22 +32,36 @@ function InventoryPage() {
         .catch((error) => {
             console.error("Error loading inventory items:", error);
         });
-    } 
+      fetch(`http://localhost:8000/inventories/${inventoryId}/`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((inv) => setInventoryName(inv.name))
+        .catch((err) => console.error("Nie udało się pobrać inwentarza", err));
+    }
   }, [inventoryId]); 
 
   return (
     <div>
-      <div className='header'>
-        <img
-          src={myIcon}
-          alt="Back icon"
-          onClick={() => navigate('/')}
-          style={{ cursor: 'pointer' }}
-        />
-        <Header />  
-      </div>
-      <div className='inventory-page'>
-        <ScanInputSection tableData={tableData} setTableData={setTableData} />
+      <Header
+        leftContent={
+          <img
+            src={myIcon}
+            alt="Powrót"
+            onClick={() => navigate('/')}
+          />
+        }
+      />
+      <div className="inventory-page">
+        <div className="scan-header-row">
+          {inventoryName && (
+            <div className="inventory-label-inline">
+              Edytujesz plik: <span>{inventoryName}</span>
+            </div>
+          )}
+          <ScanInputSection tableData={tableData} setTableData={setTableData} />
+        </div>
+
         <ReactTable tableData={tableData} setTableData={setTableData} />
       </div>
     </div>

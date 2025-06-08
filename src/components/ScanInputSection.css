@@ -4,11 +4,11 @@
     align-items: center;
     gap: 20px;
     height: 2vh;
-    width: 80%;
+    width: 80%; 
 }
 
 .input-scan{
-    width: 200px; /* tu nie wiem czy nie do zmiany */
+    width: 210px; /* tu nie wiem czy nie do zmiany */
     border: 1px solid black;
     border-radius: 15px;
     height: 30px; /* tu nie wiem czy nie do zmiany */
@@ -27,5 +27,6 @@ input::placeholder {
     width: 250px; /* tu nie wiem czy nie do zmiany */
     height: 30px; /* tu nie wiem czy nie do zmiany */
     padding: 0px;
+    font-family: "Inter", sans-serif;
 }
 

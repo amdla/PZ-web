@@ -19,4 +19,6 @@
 
 .page-body > .black-button {
     width: 15vh;
+    gap: 6px;
+    font-family: "Inter", sans-serif;
 }

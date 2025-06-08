@@ -1,43 +1,16 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import './LoginPage.css';
 
 function LoginPage() {
-  const navigate = useNavigate();
-
   const handleLogin = () => {
-    const popup = window.open(
-      "http://localhost:8000/oauth/login/",
-      "OAuthLogin",
-      "width=600,height=700"
-    );
-
-    const receiveMessage = (event) => {
-      if (event.origin !== "http://localhost:3000") return;
-
-      const user = event.data;
-      if (user && user.id) {
-        localStorage.setItem("user", JSON.stringify(user));
-        navigate("/"); // 🚀 przekieruj na stronę główną
-      } else {
-        alert("Błąd logowania");
-        navigate("/login");
-      }
-
-      window.removeEventListener("message", receiveMessage);
-    };
-
-    window.addEventListener("message", receiveMessage);
+    window.location.href = "http://localhost:8000/oauth/login/";
   };
 
-
   return (
-    <div style={{ padding: '50px', textAlign: 'center' }}>
-      <h1>Wymagane Logowanie</h1>
-      <p>Aby kontynuować, zaloguj się przez USOS.</p>
-      <button 
-        onClick={handleLogin} 
-        style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}
-      >
+    <div className="login-container">
+      <h1 className="login-title">Wymagane logowanie</h1>
+      <p className="login-description">Aby kontynuować, zaloguj się przez USOS.</p>
+      <button className="login-button" onClick={handleLogin}>
         Zaloguj się z USOS
       </button>
     </div>

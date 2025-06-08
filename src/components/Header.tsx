@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
 
-function Header() {
+function Header({ leftContent }: { leftContent?: React.ReactNode }) {
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -48,15 +48,21 @@ const handleLogout = async () => {
 
   return (
     <header className="page-header">
-      <div className='flex-row'>
-        <p>
-          {userName
-            ? `Zalogowano jako ${userName}`
-            : 'Trwa sprawdzanie logowania...'}
-        </p>
-        <button className='black-button' id='logout' onClick={handleLogout}>
-          Wyloguj
-        </button>
+      <div className="flex-row">
+        <div className="header-left">
+          {leftContent && <div className="custom-left">{leftContent}</div>}
+          <h1 className="app-title">Aplikacja do inwentaryzacji</h1>
+        </div>
+        <div className="header-right">
+          <p>
+            {userName
+              ? `Zalogowano jako ${userName}`
+              : 'Trwa sprawdzanie logowania...'}
+          </p>
+          <button className="black-button" id="logout" onClick={handleLogout}>
+            Wyloguj
+          </button>
+        </div>
       </div>
     </header>
   );

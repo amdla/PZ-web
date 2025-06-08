@@ -1,47 +1,54 @@
-/* global BigInt */
 import React, { useState, useEffect } from 'react';
 import VersionCard from './VersionCard.js';
 import './VersionList.css';
 
 function VersionList({ refreshTrigger }) {
-    const [inventories, setInventories] = useState([]);
+  const [inventories, setInventories] = useState([]);
 
-    useEffect(() => {
-        const fetchInventories = async () => {
-            try {
-                const response = await fetch("http://localhost:8000/inventories/", {
-                    credentials: "include",
-                });
-                if (!response.ok) {
-                    let errorMessage = `Błąd sieci: ${response.status} - ${response.statusText}`;
-                    try {
-                        const errorData = await response.json();
-                        errorMessage = errorData.detail || JSON.stringify(errorData);
-                    } catch (err) {
-                        console.error("Błąd podczas pobierania inwentarzy:", err);
-                    }
-                    throw new Error(errorMessage);
-                }
+  useEffect(() => {
+    const fetchInventories = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/inventories/", {
+          credentials: "include",
+        });
 
-                const data = await response.json();
-                setInventories(data.reverse());
+        if (!response.ok) {
+          let errorMessage = `Błąd sieci: ${response.status} - ${response.statusText}`;
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.detail || JSON.stringify(errorData);
+          } catch (err) {
+            console.error("Błąd podczas pobierania inwentarzy:", err);
+          }
+          throw new Error(errorMessage);
+        }
 
-            } catch (err) {
-                console.error("Błąd podczas pobierania inwentarzy:", err);
-                setInventories([]);
-            }
-        };
+        const data = await response.json();
+        setInventories(data.reverse());
+      } catch (err) {
+        console.error("Błąd podczas pobierania inwentarzy:", err);
+        setInventories([]);
+      }
+    };
 
-        fetchInventories();
-    }, [refreshTrigger]);
+    fetchInventories();
+  }, [refreshTrigger]);
 
-    return (
-        <div className='version-list'>
-            {inventories.map(inventory => (
-                <VersionCard key={inventory.id} inventory={inventory} />
-            ))}
-        </div>
-    );
+  const handleDeleteLocal = (idToDelete) => {
+    setInventories(prev => prev.filter(inv => inv.id !== idToDelete));
+  };
+
+  return (
+    <div className='version-list'>
+      {inventories.map(inventory => (
+        <VersionCard
+          key={inventory.id}
+          inventory={inventory}
+          onDelete={() => handleDeleteLocal(inventory.id)} 
+        />
+      ))}
+    </div>
+  );
 }
 
 export default VersionList;

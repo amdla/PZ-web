@@ -1,23 +1,61 @@
-.version-card-div{
+.version-card-div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-direction: row;
     background-color: #D3D9D4;
     border: 1px solid black;
     border-radius: 5px;
     width: 95%;
-    height: 13%;
-    min-height: 80px
+    padding: 10px 20px;
+    margin-bottom: 10px;
 }
 
-#version{
-    margin-left: 5%;
+#version {
     font-family: "Inter", sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
 }
-#generate-xsl.black-button{
-    margin-right: 2%;
-    width: 13vh;
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.black-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #313030;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px; 
+}
+
+.black-button:hover{
+  background-color: black;
+}
+
+.red-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px; 
+}
+
+.red-button:hover {
+  background-color: #c9302c;
+}
+
+.red-button .icon {
+  width: 16px;
+  height: 16px;
 }

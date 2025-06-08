@@ -66,7 +66,7 @@ function FilterSearch({ data, columnName, filters, setFilters, setColumnFilters,
       />
       <div className='search-input-flexbox'>
         <FilterExclusive
-          name='Zaznacz wszystkie'
+          name='Wszystkie'
           isChecked={checkboxes.selectAll || false}
           onToggle={() => toggleCheckbox('selectAll')}
         />
